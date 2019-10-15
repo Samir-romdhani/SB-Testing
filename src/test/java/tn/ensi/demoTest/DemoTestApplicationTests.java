@@ -1,33 +1,50 @@
 package tn.ensi.demoTest;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import tn.ensi.demoTest.controller.GreetingController;
+import tn.ensi.demoTest.jpa.data.GreetingDao;
 import tn.ensi.demoTest.jpa.entities.Greeting;
 
 
 /**
- * Test unitaire avec Junit4 : Spring Runner
+ * Test fonctionnelles avec MockitoJUnitRunner
  * @author rs
  *
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class DemoTestApplicationTests {
 
-	@Autowired
+	@InjectMocks
     private GreetingController greetingController;
-
+	
+	@Mock
+	private GreetingDao greetingDao ;
+ 
     @Test
     public void testHelloMessage() {
         Greeting message = greetingController.greeting0("");
         assertThat(message).isNotNull();
+    }
+    
+    @Test
+    public void testHelloAllMessage() {
+    	ArrayList<Greeting> list = new ArrayList<Greeting>();
+    	Greeting sam = new Greeting(1, "sam");
+    	Greeting lucas = new Greeting(2, "lucas");
+    	list.add(sam);
+    	list.add(lucas);
+    	when(greetingDao.findAll()).thenReturn(list);
+        assertThat(greetingController.greeting().getValue()).asList().size().isGreaterThan(1);
+        assertThat(greetingController.greeting().getValue()).asList().contains(lucas);
     }
 
 }
