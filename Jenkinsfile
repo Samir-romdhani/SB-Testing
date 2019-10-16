@@ -1,25 +1,29 @@
 pipeline {
     agent any
-
+    tools {
+        maven 'jenkins_maven'
+    }
     stages {
-        stage('Test 0') {
+        stage('Dependency check') {
             steps {
-                echo 'Test...'
-            }
-        }
-        stage('Build') {
-            steps {
-                echo 'Building...'
+                sh "mvn dependency:tree"
+                sh "mvn dependency:analyze"
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing...'
+                sh "mvn test"
             }
         }
-        stage('Deploy') {
+        stage('SonarQube') {
             steps {
-                echo 'Deploying....'
+                sh "mvn -P sonar clean verify sonar:sonar"
+            }
+        }
+
+        stage('Install') {
+            steps {
+                sh "mvn install -Dmaven.skip.test"
             }
         }
     }

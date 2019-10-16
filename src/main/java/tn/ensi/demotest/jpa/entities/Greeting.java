@@ -1,4 +1,4 @@
-package tn.ensi.demoTest.jpa.entities;
+package tn.ensi.demotest.jpa.entities;
 
 import javax.persistence.*;
 

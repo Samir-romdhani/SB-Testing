@@ -1,4 +1,4 @@
-package tn.ensi.demoTest;
+package tn.ensi.demotest;
 
 import java.util.ResourceBundle;
 
