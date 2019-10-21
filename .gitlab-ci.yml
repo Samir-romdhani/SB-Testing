@@ -1,0 +1,38 @@
+stages:
+  - dependency-check
+  - test
+  - SonarQube
+  - Install
+
+variables:
+  BUILD_IMAGE: maven:latest
+
+tree:
+  image: ${BUILD_IMAGE}
+  stage: dependency-check
+  script:
+    - mvn dependency:tree
+
+analyze:
+  image: ${BUILD_IMAGE}
+  stage: dependency-check
+  script:
+    - mvn dependency:analyze
+
+test:
+  image: ${BUILD_IMAGE}
+  stage: test
+  script:
+    - mvn test
+
+SonarQube:
+  image: ${BUILD_IMAGE}
+  stage: SonarQube
+  script:
+    - mvn -P sonar clean verify sonar:sonar
+
+Install:
+  image: ${BUILD_IMAGE}
+  stage: Install
+  script:
+    - mvn install -Dmaven.skip.test
