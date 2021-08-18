@@ -1,0 +1,14 @@
+name: actions-test
+on:
+  push
+env:
+  TEST_ENV: ${{ secrets.TEST_SECRET }}
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: git branch
+      - run: ls -al
